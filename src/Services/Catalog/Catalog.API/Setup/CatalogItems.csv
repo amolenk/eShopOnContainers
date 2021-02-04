@@ -1,4 +1,7 @@
 CatalogTypeName,CatalogBrandName,Description,Name,Price,PictureFileName,availablestock,onreorder
+Cap,Dapr,Dapr Cap,Dapr Cap,9.99,13.png,100,false
+T-Shirt,Dapr,Dapr Zipper Hoodie,Dapr Zipper Hoodie,14.99,14.png,100,false
+Sticker,Dapr,Dapr Logo Sticker,Dapr Logo Sticker,1.99,15.png,100,false
 T-Shirt,.NET,".NET Bot Black Hoodie, and more",.NET Bot Black Hoodie,19.5,1.png,100,false
 Mug,.NET,.NET Black & White Mug,.NET Black & White Mug,8.50,2.png,89,true
 T-Shirt,Other,Prism White T-Shirt,Prism White T-Shirt,12,3.png,56,false
@@ -11,4 +14,3 @@ Mug,Other,Cup<T> White Mug,Cup<T> White Mug,12,9.png,76,false
 Sheet,.NET,.NET Foundation Sheet,.NET Foundation Sheet,12,10.png,11,false
 Sheet,.NET,Cup<T> Sheet,Cup<T> Sheet,8.5,11.png,3,false
 T-Shirt,Other,Prism White TShirt,Prism White TShirt,12,12.png,0,false
-Mug, Other, De los Palotes, pepito, 12, 12.png, 0, false
