@@ -105,6 +105,7 @@ namespace Payment.API
             app.UseRouting();
             app.UseEndpoints(endpoints =>
             {
+                endpoints.MapControllers();
                 endpoints.MapSubscribeHandler();
                 endpoints.MapHealthChecks("/hc", new HealthCheckOptions()
                 {
