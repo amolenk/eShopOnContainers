@@ -302,6 +302,18 @@ services:
       - identityUrl=http://identity-api
     ports:
       - "5112:80"
+      - "30012:50001"
+
+  ordering-signalrhub-dapr:
+    command: ["./daprd",
+      "-app-id", "ordering-signalrhub",
+      "-app-port", "80",
+      "-components-path", "/components",
+      "-config", "/configuration/eshop-config.yaml"
+      ]
+    volumes:
+      - "./dapr/components/:/components"
+      - "./dapr/configuration/:/configuration"
 
   webstatus:
     environment:
