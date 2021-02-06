@@ -156,6 +156,12 @@ services:
       - catalog-api
       - basket-api
 
+  ordering-signalrhub-dapr:
+    image: "daprio/daprd:1.0.0-rc.3"
+    network_mode: "service:ordering-signalrhub"
+    depends_on:
+      - ordering-signalrhub
+
   webstatus:
     image: ${REGISTRY:-eshop}/webstatus:${PLATFORM:-linux}-${TAG:-latest}
     build:
