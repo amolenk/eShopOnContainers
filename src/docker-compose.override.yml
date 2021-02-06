@@ -184,6 +184,18 @@ services:
       - Serilog__MinimumLevel__Override__Microsoft.eShopOnContainers.BuildingBlocks.EventBusRabbitMQ=Verbose
     ports:
       - "5111:80"
+      - "30011:50001"
+
+  ordering-backgroundtasks-dapr:
+    command: ["./daprd",
+      "-app-id", "ordering-backgroundtasks",
+      "-app-port", "80",
+      "-components-path", "/components",
+      "-config", "/configuration/eshop-config.yaml"
+      ]
+    volumes:
+      - "./dapr/components/:/components"
+      - "./dapr/configuration/:/configuration"
 
   payment-api:
     environment:

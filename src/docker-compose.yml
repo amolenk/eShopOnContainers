@@ -83,6 +83,12 @@ services:
       - sqldata
       - rabbitmq
 
+  ordering-backgroundtasks-dapr:
+    image: "daprio/daprd:1.0.0-rc.3"
+    network_mode: "service:ordering-backgroundtasks"
+    depends_on:
+      - ordering-backgroundtasks
+
   payment-api:
     image: ${REGISTRY:-eshop}/payment.api:${PLATFORM:-linux}-${TAG:-latest}
     build:

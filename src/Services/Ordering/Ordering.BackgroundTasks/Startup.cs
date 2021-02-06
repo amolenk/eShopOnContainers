@@ -24,7 +24,8 @@
                 .Configure<BackgroundTaskSettings>(this.Configuration)
                 .AddOptions()
                 .AddHostedService<GracePeriodManagerService>()
-                .AddEventBus(this.Configuration);
+                .AddEventBus(this.Configuration)
+                .AddDaprClient();
         }
 
 
