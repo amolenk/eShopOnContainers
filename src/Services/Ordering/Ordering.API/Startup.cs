@@ -96,12 +96,14 @@
                    c.OAuthAppName("Ordering Swagger UI");
                });
 
+            app.UseCloudEvents();
             app.UseRouting();
             app.UseCors("CorsPolicy");
             ConfigureAuth(app);
 
             app.UseEndpoints(endpoints =>
             {
+                endpoints.MapSubscribeHandler();
                 endpoints.MapGrpcService<OrderingService>();
                 endpoints.MapDefaultControllerRoute();
                 endpoints.MapControllers();
@@ -174,6 +176,7 @@
                 .AddApplicationPart(typeof(OrdersController).Assembly)
                 .AddNewtonsoftJson()
                 .SetCompatibilityVersion(CompatibilityVersion.Version_3_0)
+                .AddDapr()
             ;
 
             services.AddCors(options =>

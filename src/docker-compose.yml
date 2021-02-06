@@ -17,6 +17,9 @@ services:
   rabbitmq:
     image: rabbitmq:3-management-alpine
 
+  zipkin:
+    image: openzipkin/zipkin-slim
+
   identity-api:
     image: ${REGISTRY:-eshop}/identity.api:${PLATFORM:-linux}-${TAG:-latest}
     build:
@@ -35,6 +38,12 @@ services:
       - identity-api
       - rabbitmq
 
+  basket-api-dapr:
+    image: "daprio/daprd:1.0.0-rc.3"
+    network_mode: "service:basket-api"
+    depends_on:
+      - basket-api
+
   catalog-api:
     image: ${REGISTRY:-eshop}/catalog.api:${PLATFORM:-linux}-${TAG:-latest}
     build:
@@ -44,6 +53,12 @@ services:
       - sqldata
       - rabbitmq
 
+  catalog-api-dapr:
+    image: "daprio/daprd:1.0.0-rc.3"
+    network_mode: "service:catalog-api"
+    depends_on:
+      - catalog-api
+
   ordering-api:
     image: ${REGISTRY:-eshop}/ordering.api:${PLATFORM:-linux}-${TAG:-latest}
     build:
@@ -52,6 +67,12 @@ services:
     depends_on:
       - sqldata
       - rabbitmq
+
+  ordering-api-dapr:
+    image: "daprio/daprd:1.0.0-rc.3"
+    network_mode: "service:ordering-api"
+    depends_on:
+      - ordering-api
 
   ordering-backgroundtasks:
     image: ${REGISTRY:-eshop}/ordering.backgroundtasks:${PLATFORM:-linux}-${TAG:-latest}
@@ -70,6 +91,12 @@ services:
     depends_on:
       - rabbitmq
 
+  payment-api-dapr:
+    image: "daprio/daprd:1.0.0-rc.3"
+    network_mode: "service:payment-api"
+    depends_on:
+      - payment-api
+
   webhooks-api:
     image: ${REGISTRY:-eshop}/webhooks.api:${PLATFORM:-linux}-${TAG:-latest}
     build:
@@ -77,6 +104,12 @@ services:
       dockerfile: Services/Webhooks/Webhooks.API/Dockerfile
     depends_on:
       - sqldata
+
+  webhooks-api-dapr:
+    image: "daprio/daprd:1.0.0-rc.3"
+    network_mode: "service:webhooks-api"
+    depends_on:
+      - webhooks-api
 
   mobileshoppingapigw:
     image: envoyproxy/envoy:v1.11.1

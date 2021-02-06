@@ -17,8 +17,6 @@ using Microsoft.eShopOnContainers.BuildingBlocks.EventBusRabbitMQ;
 using Microsoft.eShopOnContainers.BuildingBlocks.EventBusServiceBus;
 using Microsoft.eShopOnContainers.Services.Basket.API.Controllers;
 using Microsoft.eShopOnContainers.Services.Basket.API.Infrastructure.Repositories;
-using Microsoft.eShopOnContainers.Services.Basket.API.IntegrationEvents.EventHandling;
-using Microsoft.eShopOnContainers.Services.Basket.API.IntegrationEvents.Events;
 using Microsoft.eShopOnContainers.Services.Basket.API.Model;
 using Microsoft.eShopOnContainers.Services.Basket.API.Services;
 using Microsoft.Extensions.Configuration;
@@ -314,7 +312,6 @@ namespace Microsoft.eShopOnContainers.Services.Basket.API
 
             services.AddSingleton<IEventBusSubscriptionsManager, InMemoryEventBusSubscriptionsManager>();
 
-            services.AddTransient<ProductPriceChangedIntegrationEventHandler>();
             services.AddTransient<OrderStartedIntegrationEventHandler>();
         }
 
@@ -322,7 +319,6 @@ namespace Microsoft.eShopOnContainers.Services.Basket.API
         {
             var eventBus = app.ApplicationServices.GetRequiredService<IEventBus>();
 
-            eventBus.Subscribe<ProductPriceChangedIntegrationEvent, ProductPriceChangedIntegrationEventHandler>();
             eventBus.Subscribe<OrderStartedIntegrationEvent, OrderStartedIntegrationEventHandler>();
         }
     }

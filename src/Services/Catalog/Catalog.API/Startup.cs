@@ -82,10 +82,12 @@ namespace Microsoft.eShopOnContainers.Services.Catalog.API
                  c.SwaggerEndpoint($"{ (!string.IsNullOrEmpty(pathBase) ? pathBase : string.Empty) }/swagger/v1/swagger.json", "Catalog.API V1");
              });
 
+            app.UseCloudEvents();
             app.UseRouting();
             app.UseCors("CorsPolicy");
             app.UseEndpoints(endpoints =>
             {
+                endpoints.MapSubscribeHandler();
                 endpoints.MapDefaultControllerRoute();
                 endpoints.MapControllers();
                 endpoints.MapGet("/_proto/", async ctx =>
@@ -140,7 +142,7 @@ namespace Microsoft.eShopOnContainers.Services.Catalog.API
             services.AddControllers(options =>
             {
                 options.Filters.Add(typeof(HttpGlobalExceptionFilter));
-            }).AddNewtonsoftJson();
+            }).AddNewtonsoftJson().AddDapr();
 
             services.AddCors(options =>
             {

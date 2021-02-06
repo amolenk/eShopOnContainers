@@ -33,6 +33,7 @@ namespace Payment.API
         {
             services.AddCustomHealthCheck(Configuration);
             services.Configure<PaymentSettings>(Configuration);
+            services.AddMvc().AddDapr();
 
             RegisterAppInsights(services);
 
@@ -100,9 +101,11 @@ namespace Payment.API
 
             ConfigureEventBus(app);
 
+            app.UseCloudEvents();
             app.UseRouting();
             app.UseEndpoints(endpoints =>
             {
+                endpoints.MapSubscribeHandler();
                 endpoints.MapHealthChecks("/hc", new HealthCheckOptions()
                 {
                     Predicate = _ => true,

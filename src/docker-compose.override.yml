@@ -20,7 +20,7 @@ services:
     ports:
       - "5433:1433"
     volumes:
-      - eshop-sqldata:/var/opt/mssql
+      - eshop-sqldata:/var/opt/mssql/data
 
   nosqldata:
     ports:
@@ -37,6 +37,10 @@ services:
     ports:
       - "15672:15672"
       - "5672:5672"
+
+  zipkin:
+    ports:
+      - "5411:9411"
 
   identity-api:
     environment:
@@ -78,6 +82,18 @@ services:
     ports:
       - "5103:80"
       - "9103:81"
+      - "30003:50001"
+
+  basket-api-dapr:
+    command: ["./daprd",
+      "-app-id", "basket-api",
+      "-app-port", "80",
+      "-components-path", "/components",
+      "-config", "/configuration/eshop-config.yaml"
+      ]
+    volumes:
+      - "./dapr/components/:/components"
+      - "./dapr/configuration/:/configuration"
 
   catalog-api:
     environment:
@@ -100,6 +116,18 @@ services:
     ports:
       - "5101:80"
       - "9101:81"
+      - "30001:50001"
+
+  catalog-api-dapr:
+    command: ["./daprd",
+      "-app-id", "catalog-api",
+      "-app-port", "80",
+      "-components-path", "/components",
+      "-config", "/configuration/eshop-config.yaml"
+      ]
+    volumes:
+      - "./dapr/components/:/components"
+      - "./dapr/configuration/:/configuration"
 
   ordering-api:
     environment:
@@ -125,6 +153,18 @@ services:
     ports:
       - "5102:80"
       - "9102:81"
+      - "30002:50001"
+
+  ordering-api-dapr:
+    command: ["./daprd",
+      "-app-id", "ordering-api",
+      "-app-port", "80",
+      "-components-path", "/components",
+      "-config", "/configuration/eshop-config.yaml"
+      ]
+    volumes:
+      - "./dapr/components/:/components"
+      - "./dapr/configuration/:/configuration"
 
   ordering-backgroundtasks:
     environment:
@@ -159,6 +199,18 @@ services:
       - Serilog__MinimumLevel__Override__Microsoft.eShopOnContainers.BuildingBlocks.EventBusRabbitMQ=Verbose
     ports:
       - "5108:80"
+      - "30008:50001"
+
+  payment-api-dapr:
+    command: ["./daprd",
+      "-app-id", "payment-api",
+      "-app-port", "80",
+      "-components-path", "/components",
+      "-config", "/configuration/eshop-config.yaml"
+      ]
+    volumes:
+      - "./dapr/components/:/components"
+      - "./dapr/configuration/:/configuration"
 
   webhooks-api:
     environment:
@@ -172,6 +224,18 @@ services:
       - IdentityUrlExternal=http://${ESHOP_EXTERNAL_DNS_NAME_OR_IP}:5105
     ports:
       - "5113:80"
+      - "30009:50001"
+
+  webhooks-api-dapr:
+    command: ["./daprd",
+      "-app-id", "webhooks-api",
+      "-app-port", "80",
+      "-components-path", "/components",
+      "-config", "/configuration/eshop-config.yaml"
+      ]
+    volumes:
+      - "./dapr/components/:/components"
+      - "./dapr/configuration/:/configuration"
 
   mobileshoppingapigw:
     volumes:

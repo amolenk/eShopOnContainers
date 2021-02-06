@@ -47,7 +47,8 @@ namespace Ordering.SignalrHub
                         .AllowAnyHeader()
                         .SetIsOriginAllowed((host) => true)
                         .AllowCredentials());
-                });
+                })
+                .AddMvc().AddDapr();
 
             if (Configuration.GetValue<string>("IsClusterEnv") == bool.TrueString)
             {
@@ -135,6 +136,7 @@ namespace Ordering.SignalrHub
                 app.UsePathBase(pathBase);
             }
 
+            app.UseCloudEvents();
             app.UseRouting();
             app.UseCors("CorsPolicy");
             app.UseAuthentication();
@@ -142,6 +144,7 @@ namespace Ordering.SignalrHub
 
             app.UseEndpoints(endpoints =>
             {
+                endpoints.MapSubscribeHandler();
                 endpoints.MapHealthChecks("/hc", new HealthCheckOptions()
                 {
                     Predicate = _ => true,

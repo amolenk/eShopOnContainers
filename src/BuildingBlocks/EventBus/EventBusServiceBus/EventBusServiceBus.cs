@@ -58,14 +58,6 @@
                 .GetResult();
         }
 
-        public void SubscribeDynamic<TH>(string eventName)
-            where TH : IDynamicIntegrationEventHandler
-        {
-            _logger.LogInformation("Subscribing to dynamic event {EventName} with {EventHandler}", eventName, typeof(TH).Name);
-
-            _subsManager.AddDynamicSubscription<TH>(eventName);
-        }
-
         public void Subscribe<T, TH>()
             where T : IntegrationEvent
             where TH : IIntegrationEventHandler<T>
@@ -117,14 +109,6 @@
             _subsManager.RemoveSubscription<T, TH>();
         }
 
-        public void UnsubscribeDynamic<TH>(string eventName)
-            where TH : IDynamicIntegrationEventHandler
-        {
-            _logger.LogInformation("Unsubscribing from dynamic event {EventName}", eventName);
-
-            _subsManager.RemoveDynamicSubscription<TH>(eventName);
-        }
-
         public void Dispose()
         {
             _subsManager.Clear();
@@ -167,22 +151,12 @@
                     var subscriptions = _subsManager.GetHandlersForEvent(eventName);
                     foreach (var subscription in subscriptions)
                     {
-                        if (subscription.IsDynamic)
-                        {
-                            var handler = scope.ResolveOptional(subscription.HandlerType) as IDynamicIntegrationEventHandler;
-                            if (handler == null) continue;
-                            dynamic eventData = JObject.Parse(message);
-                            await handler.Handle(eventData);
-                        }
-                        else
-                        {
-                            var handler = scope.ResolveOptional(subscription.HandlerType);
-                            if (handler == null) continue;
-                            var eventType = _subsManager.GetEventTypeByName(eventName);
-                            var integrationEvent = JsonConvert.DeserializeObject(message, eventType);
-                            var concreteType = typeof(IIntegrationEventHandler<>).MakeGenericType(eventType);
-                            await (Task)concreteType.GetMethod("Handle").Invoke(handler, new object[] { integrationEvent });
-                        }
+                        var handler = scope.ResolveOptional(subscription.HandlerType);
+                        if (handler == null) continue;
+                        var eventType = _subsManager.GetEventTypeByName(eventName);
+                        var integrationEvent = JsonConvert.DeserializeObject(message, eventType);
+                        var concreteType = typeof(IIntegrationEventHandler<>).MakeGenericType(eventType);
+                        await (Task)concreteType.GetMethod("Handle").Invoke(handler, new object[] { integrationEvent });
                     }
                 }
                 processed = true;

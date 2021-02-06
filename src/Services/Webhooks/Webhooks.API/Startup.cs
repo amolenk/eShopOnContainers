@@ -58,7 +58,8 @@ namespace Webhooks.API
                 .AddTransient<IIdentityService, IdentityService>()
                 .AddTransient<IGrantUrlTesterService, GrantUrlTesterService>()
                 .AddTransient<IWebhooksRetriever, WebhooksRetriever>()
-                .AddTransient<IWebhooksSender, WebhooksSender>();
+                .AddTransient<IWebhooksSender, WebhooksSender>()
+                .AddMvc().AddDapr();
 
             var container = new ContainerBuilder();
             container.Populate(services);
@@ -78,13 +79,14 @@ namespace Webhooks.API
             }
 
 
-
+            app.UseCloudEvents();
             app.UseRouting();
             app.UseCors("CorsPolicy");
             ConfigureAuth(app);
 
             app.UseEndpoints(endpoints =>
             {
+                endpoints.MapSubscribeHandler();
                 endpoints.MapDefaultControllerRoute();
                 endpoints.MapControllers();
                 endpoints.MapHealthChecks("/hc", new HealthCheckOptions()

@@ -21,6 +21,7 @@
     <PackageReference Include="AspNetCore.HealthChecks.Redis" Version="5.0.1" />
     <PackageReference Include="AspNetCore.HealthChecks.UI.Client" Version="5.0.1" />
     <PackageReference Include="Autofac.Extensions.DependencyInjection" Version="7.1.0" />
+    <PackageReference Include="Dapr.AspNetCore" Version="1.0.0-rc05" />
     <PackageReference Include="Google.Protobuf" Version="3.14.0" />
     <PackageReference Include="Grpc.AspNetCore.Server" Version="2.34.0" />
     <PackageReference Include="Grpc.Tools" Version="2.34.0" PrivateAssets="All" />   
