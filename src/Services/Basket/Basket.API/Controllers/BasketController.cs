@@ -1,5 +1,6 @@
 ﻿using Basket.API.IntegrationEvents.Events;
 using Basket.API.Model;
+using Dapr;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.eShopOnContainers.BuildingBlocks.EventBus.Abstractions;

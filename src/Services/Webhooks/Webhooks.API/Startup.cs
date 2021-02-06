@@ -207,49 +207,16 @@ namespace Webhooks.API
 
             return services;
         }
-        public static IServiceCollection AddEventBus(this IServiceCollection services, IConfiguration configuration)
-        {
-            var subscriptionClientName = configuration["SubscriptionClientName"];
+public static IServiceCollection AddEventBus(this IServiceCollection services, IConfiguration configuration)
+{
+    services.AddSingleton<IEventBus, DaprEventBus>();
 
-            if (configuration.GetValue<bool>("AzureServiceBusEnabled"))
-            {
-                services.AddSingleton<IEventBus, EventBusServiceBus>(sp =>
-                {
-                    var serviceBusPersisterConnection = sp.GetRequiredService<IServiceBusPersisterConnection>();
-                    var iLifetimeScope = sp.GetRequiredService<ILifetimeScope>();
-                    var logger = sp.GetRequiredService<ILogger<EventBusServiceBus>>();
-                    var eventBusSubcriptionsManager = sp.GetRequiredService<IEventBusSubscriptionsManager>();
+    services.AddTransient<ProductPriceChangedIntegrationEventHandler>();
+    services.AddTransient<OrderStatusChangedToShippedIntegrationEventHandler>();
+    services.AddTransient<OrderStatusChangedToPaidIntegrationEventHandler>();
 
-                    return new EventBusServiceBus(serviceBusPersisterConnection, logger,
-                        eventBusSubcriptionsManager, subscriptionClientName, iLifetimeScope);
-                });
-
-            }
-            else
-            {
-                services.AddSingleton<IEventBus, EventBusRabbitMQ>(sp =>
-                {
-                    var rabbitMQPersistentConnection = sp.GetRequiredService<IRabbitMQPersistentConnection>();
-                    var iLifetimeScope = sp.GetRequiredService<ILifetimeScope>();
-                    var logger = sp.GetRequiredService<ILogger<EventBusRabbitMQ>>();
-                    var eventBusSubcriptionsManager = sp.GetRequiredService<IEventBusSubscriptionsManager>();
-
-                    var retryCount = 5;
-                    if (!string.IsNullOrEmpty(configuration["EventBusRetryCount"]))
-                    {
-                        retryCount = int.Parse(configuration["EventBusRetryCount"]);
-                    }
-
-                    return new EventBusRabbitMQ(rabbitMQPersistentConnection, logger, iLifetimeScope, eventBusSubcriptionsManager, subscriptionClientName, retryCount);
-                });
-            }
-
-            services.AddSingleton<IEventBusSubscriptionsManager, InMemoryEventBusSubscriptionsManager>();
-            services.AddTransient<ProductPriceChangedIntegrationEventHandler>();
-            services.AddTransient<OrderStatusChangedToShippedIntegrationEventHandler>();
-            services.AddTransient<OrderStatusChangedToPaidIntegrationEventHandler>();
-            return services;
-        }
+    return services;
+}
 
         public static IServiceCollection AddCustomHealthCheck(this IServiceCollection services, IConfiguration configuration)
         {
