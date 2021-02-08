@@ -13,8 +13,6 @@ using Microsoft.Azure.ServiceBus;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.eShopOnContainers.BuildingBlocks.EventBus;
 using Microsoft.eShopOnContainers.BuildingBlocks.EventBus.Abstractions;
-using Microsoft.eShopOnContainers.BuildingBlocks.EventBusRabbitMQ;
-using Microsoft.eShopOnContainers.BuildingBlocks.EventBusServiceBus;
 using Microsoft.eShopOnContainers.BuildingBlocks.IntegrationEventLogEF;
 using Microsoft.eShopOnContainers.BuildingBlocks.IntegrationEventLogEF.Services;
 using Microsoft.eShopOnContainers.Services.Catalog.API.Infrastructure;
@@ -329,7 +327,6 @@ namespace Microsoft.eShopOnContainers.Services.Catalog.API
         {
             services.AddSingleton<IEventBus, DaprEventBus>();
 
-            services.AddSingleton<IEventBusSubscriptionsManager, InMemoryEventBusSubscriptionsManager>();
             services.AddTransient<OrderStatusChangedToAwaitingValidationIntegrationEventHandler>();
             services.AddTransient<OrderStatusChangedToPaidIntegrationEventHandler>();
 
