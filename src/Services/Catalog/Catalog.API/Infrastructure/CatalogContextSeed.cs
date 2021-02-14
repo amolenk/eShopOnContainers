@@ -25,7 +25,7 @@
 
             await policy.ExecuteAsync(async () =>
             {
-                var useCustomizationData = settings.Value.UseCustomizationData;
+                var useCustomizationData = true;
                 var contentRootPath = env.ContentRootPath;
                 var picturePath = env.WebRootPath;
 
