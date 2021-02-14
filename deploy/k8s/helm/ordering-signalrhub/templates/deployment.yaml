@@ -20,6 +20,11 @@ spec:
       labels:
         app: {{ template "ordering-signalrhub.name" . }}
         release: {{ .Release.Name }}
+      annotations:
+        dapr.io/enabled: "true"
+        dapr.io/app-id: "ordering-signalrhub"
+        dapr.io/app-port: "80"
+        dapr.io/config: "config"
     spec:
       {{ if .Values.inf.registry -}}
       imagePullSecrets:
